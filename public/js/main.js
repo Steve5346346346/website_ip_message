@@ -1,42 +1,58 @@
-document.addEventListener("DOMContentLoaded", (event) => {
-    fetchData();
-});
-
 async function fetchData() {
     try {
-        // Отримання IP-адреси користувача
+        // Отримання IP адреси користувача
         const userIP = await fetch("https://api.ipify.org?format=json")
-            .then(response => response.json());
+            .then(response => response.json())
+            .then(result => result.ip)
+            .catch(error => {
+                console.error("Ми не змогли знайти цю адресу", error);
+                throw error;
+            });
 
         console.log("userIP", userIP);
 
-        // Отримання інформації про користувача
-        const userInfo = await fetch(`https://ip-api.com/json/${userIP.ip}?fields=status,message,country,countryCode,region,regionName,city,zip,lat,lon,timezone,isp,org,as,proxy,hosting,query`)
-            .then(response => response.json());
+        // Запит до IP-API Batch
+        const batchRequest = [{ query: userIP }];
+
+        const userInfo = await fetch('https://ip-api.com/batch', {
+            method: 'POST',
+            body: JSON.stringify(batchRequest),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(result => result[0])
+        .catch(error => {
+            console.error("Помилка під час отримання даних", error);
+            throw error;
+        });
 
         console.log("userInfo", userInfo);
 
+        // Відображення даних на сторінці
         const contentElement = document.getElementById("content");
 
         if (userInfo.countryCode === "UA") {
-            contentElement.innerHTML = "Країна Україна";
+            contentElement.innerHTML = "Країна";
         } else if (userInfo.proxy) {
-            contentElement.innerHTML = `Вибач ти використовуєш VPN ${userInfo.country}`;
+            contentElement.innerHTML = `Вибач, ти використовуєш VPN з ${userInfo.country}`;
         } else {
             contentElement.innerHTML = "HELLO";
         }
 
-        // Надсилання даних на сервер
+        // Відправка даних на сервер
         await fetch('/api/submit', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
+                'Content-Type': 'application/json'
             },
-            body: JSON.stringify(userInfo),
-        }).then(response => response.text())
-          .then(data => console.log('Server response:', data))
-          .catch(error => console.error('Error sending data:', error));
+            body: JSON.stringify(userInfo)
+        });
     } catch (error) {
-        console.error("Error fetching data", error);
+        console.error("Error in fetchData", error);
     }
 }
+
+// Запуск функції fetchData при завантаженні сторінки
+window.addEventListener("load", fetchData);
