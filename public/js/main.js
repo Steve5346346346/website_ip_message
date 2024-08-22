@@ -35,9 +35,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         const contentElement = document.getElementById("content");
         contentElement.innerHTML = `
             <p>Country: ${userInfo.country_name}</p>
-            <p>Region: ${userInfo.state_prov}</p>
-            <p>City: ${userInfo.city}</p>
-            <p>IP: ${userInfo.ip}</p>
         `;
     } catch (error) {
         console.error("Error:", error);
