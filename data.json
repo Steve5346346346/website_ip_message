@@ -1,0 +1,18 @@
+{
+  "status": "success",
+  "country": "France",
+  "countryCode": "FR",
+  "region": "IDF",
+  "regionName": "Île-de-France",
+  "city": "Paris",
+  "zip": "75001",
+  "lat": 48.8323,
+  "lon": 2.4075,
+  "timezone": "Europe/Paris",
+  "isp": "Online S.A.S.",
+  "org": "Scaleway",
+  "as": "AS12876 SCALEWAY S.A.S.",
+  "proxy": true,
+  "hosting": true,
+  "query": "51.158.231.102"
+}
