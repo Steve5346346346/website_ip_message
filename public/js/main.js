@@ -11,7 +11,7 @@ async function fetchData() {
         console.log("userIP", userIP);
 
         // Отримання інформації про користувача
-        const userInfo = await fetch(`http://ip-api.com/json/${userIP.ip}?fields=status,message,country,countryCode,region,regionName,city,zip,lat,lon,timezone,isp,org,as,proxy,hosting,query`)
+        const userInfo = await fetch(`https://ip-api.com/json/${userIP.ip}?fields=status,message,country,countryCode,region,regionName,city,zip,lat,lon,timezone,isp,org,as,proxy,hosting,query`)
             .then(response => response.json());
 
         console.log("userInfo", userInfo);
